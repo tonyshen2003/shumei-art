@@ -96,53 +96,33 @@
         }
 
         /* === 顶部导航栏 - Apple Style === */
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 0 20px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--overlay-thin);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 0.5px solid var(--separator-color);
-        }
-
-        .header-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--label-primary);
-            letter-spacing: -0.02em;
-        }
-
-        .back-btn {
-            display: none;
+        .detail-back-btn {
             background: none;
             border: none;
             font-size: 17px;
             font-weight: 400;
             color: var(--accent-color);
             cursor: pointer;
-            padding: 4px 8px 4px 0;
+            padding: 8px 4px 12px;
             font-family: inherit;
             transition: opacity var(--duration-fast) var(--ease-out);
         }
 
-        .back-btn:active {
+        .detail-back-btn:active {
             opacity: 0.5;
         }
 
         /* === 分类 Tab - Apple Segmented Control Style === */
         .category-tabs {
             display: flex;
-            padding: var(--space-md) 20px;
+            padding: var(--space-lg) 20px var(--space-md);
             gap: var(--space-sm);
             overflow-x: auto;
             scrollbar-width: none;
             background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
 
         .category-tabs::-webkit-scrollbar {
@@ -407,13 +387,6 @@
 </head>
 <body>
 
-    <!-- 顶部导航栏 -->
-    <header class="header">
-        <button class="back-btn" id="backBtn" onclick="showListView()">← 返回</button>
-        <div class="header-title" id="headerTitle">树莓社作品集</div>
-        <div style="width: 40px;"></div> <!-- 占位保持居中 -->
-    </header>
-
     <!-- 列表视图 -->
     <div id="list-view">
         <!-- 分类 Tab 栏 -->
@@ -432,6 +405,7 @@
     <!-- 详情/播放器视图 -->
     <div id="detail-view">
         <div class="view-container">
+            <button class="detail-back-btn" onclick="showListView()">← 返回</button>
             <!-- 16:9 响应式视频播放器 -->
             <div class="video-player-container" id="playerWrapper"></div>
 
@@ -619,8 +593,6 @@
             document.getElementById('detail-view').classList.remove('fade-enter');
             void document.getElementById('detail-view').offsetWidth;
             document.getElementById('detail-view').classList.add('fade-enter');
-            document.getElementById('backBtn').style.display = 'block';
-            document.getElementById('headerTitle').innerText = work.categoryName;
 
             // 滚动到顶部
             window.scrollTo(0, 0);
@@ -637,8 +609,6 @@
             document.getElementById('list-view').classList.remove('fade-enter');
             void document.getElementById('list-view').offsetWidth;
             document.getElementById('list-view').classList.add('fade-enter');
-            document.getElementById('backBtn').style.display = 'none';
-            document.getElementById('headerTitle').innerText = '树莓社作品集';
 
             window.scrollTo(0, 0);
         }
