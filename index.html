@@ -5,72 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>社团作品展示</title>
     <style>
-        /* === 基础样式与变量 === */
+        /* === Apple Design System 变量 === */
         :root {
-            --primary-color: #E91E63; /* 社团主题色（粉红/莓果色） */
-            --bg-color: #F8F9FA;
-            --card-bg: #FFFFFF;
-            --text-main: #212121;
-            --text-sub: #666666;
-            --border-color: #EEEEEE;
-            --radius: 16px;
+            /* 色彩系统 - Apple Human Interface */
+            --accent-color: #FF2D55; /* Apple Pink 系统红粉色 */
+            --accent-color-secondary: #FF6B8A;
+            --bg-primary: #F2F2F7; /* Apple 系统分组背景色 */
+            --bg-secondary: #FFFFFF; /* 卡片/内容背景 */
+            --bg-tertiary: #F9F9FB; /* 次要内容背景 */
+            --label-primary: #000000; /* 主文本 */
+            --label-secondary: #3C3C43; /* 次要文本（带透明度使用） */
+            --label-tertiary: #8E8E93; /* 三级文本 */
+            --separator-color: rgba(60, 60, 67, 0.12); /* 分割线 */
+            --overlay-thin: rgba(255, 255, 255, 0.7);
+
+            /* 圆角 - Apple 圆角规范 */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+
+            /* 阴影 - Apple 柔和阴影 */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+            /* 间距 - 8px 基准 */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 20px;
+            --space-2xl: 28px;
+            --space-3xl: 32px;
+
+            /* 动效 - Apple 缓动曲线 */
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+            --duration-fast: 0.2s;
+            --duration-normal: 0.35s;
+            --duration-slow: 0.5s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --accent-color: #FF375F;
+                --accent-color-secondary: #FF6B8A;
+                --bg-primary: #000000;
+                --bg-secondary: #1C1C1E;
+                --bg-tertiary: #2C2C2E;
+                --label-primary: #FFFFFF;
+                --label-secondary: rgba(235, 235, 245, 0.6);
+                --label-tertiary: rgba(235, 235, 245, 0.3);
+                --separator-color: rgba(84, 84, 88, 0.6);
+                --overlay-thin: rgba(20, 20, 20, 0.75);
+                --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+                --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+                --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+                --tag-bg: rgba(0, 0, 0, 0.6);
+                --tag-text: #FFFFFF;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --tag-bg: rgba(0, 0, 0, 0.5);
+                --tag-text: #FFFFFF;
+            }
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding-bottom: 24px;
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* === 顶部导航 === */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--label-primary);
+            padding-bottom: var(--space-2xl);
+            line-height: 1.5;
+            letter-spacing: -0.01em;
+        }
+
+        /* === 顶部导航栏 - Apple Style === */
         .header {
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
             z-index: 100;
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 16px;
+            padding: 0 20px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 52px;
+            background: var(--overlay-thin);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 0.5px solid var(--separator-color);
         }
 
         .header-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--text-main);
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--label-primary);
+            letter-spacing: -0.02em;
         }
 
         .back-btn {
             display: none;
             background: none;
             border: none;
-            font-size: 16px;
-            color: var(--primary-color);
-            font-weight: bold;
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--accent-color);
             cursor: pointer;
             padding: 4px 8px 4px 0;
+            font-family: inherit;
+            transition: opacity var(--duration-fast) var(--ease-out);
         }
 
-        /* === 分类 Tab === */
+        .back-btn:active {
+            opacity: 0.5;
+        }
+
+        /* === 分类 Tab - Apple Segmented Control Style === */
         .category-tabs {
             display: flex;
-            background: #fff;
-            padding: 8px 16px;
-            gap: 8px;
+            padding: var(--space-md) 20px;
+            gap: var(--space-sm);
             overflow-x: auto;
-            border-bottom: 1px solid var(--border-color);
             scrollbar-width: none;
+            background: var(--bg-primary);
         }
 
         .category-tabs::-webkit-scrollbar {
@@ -78,61 +150,79 @@
         }
 
         .tab-btn {
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            background: #F1F3F5;
-            color: var(--text-sub);
+            padding: 7px 16px;
+            border-radius: 9px;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--label-secondary);
             font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
             white-space: nowrap;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--duration-fast) var(--ease-out);
         }
 
         .tab-btn.active {
-            background: var(--primary-color);
-            color: #fff;
-            border-color: var(--primary-color);
-            font-weight: bold;
+            background: var(--bg-secondary);
+            color: var(--label-primary);
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
         }
 
-        /* === 列表页样式 === */
+        .tab-btn:active {
+            opacity: 0.7;
+            transform: scale(0.97);
+        }
+
+        /* === 列表页容器 === */
         .view-container {
-            padding: 16px;
-            max-width: 800px;
+            padding: var(--space-lg) 20px;
+            max-width: 840px;
             margin: 0 auto;
         }
 
+        /* === 作品网格 - Apple Grid === */
         .works-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
+            gap: var(--space-xl);
         }
 
-        @media (min-width: 600px) {
+        @media (min-width: 640px) {
             .works-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-2xl) var(--space-xl);
             }
         }
 
+        /* === 作品卡片 - Apple Card Style === */
         .work-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow-sm);
             cursor: pointer;
+            transition: transform var(--duration-normal) var(--ease-out),
+                        box-shadow var(--duration-normal) var(--ease-out);
+        }
+
+        .work-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .work-card:active {
             transform: scale(0.98);
+            transition-duration: var(--duration-fast);
         }
 
         .card-cover-wrapper {
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9 */
-            background-color: #E0E0E0;
+            background-color: var(--bg-tertiary);
+            overflow: hidden;
         }
 
         .card-cover {
@@ -142,29 +232,39 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform var(--duration-slow) var(--ease-out);
+        }
+
+        .work-card:hover .card-cover {
+            transform: scale(1.03);
         }
 
         .card-tag {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
+            top: 10px;
+            right: 10px;
+            background: var(--tag-bg);
+            color: var(--tag-text);
             font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 4px;
-            backdrop-filter: blur(4px);
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            letter-spacing: 0.01em;
         }
 
         .card-info {
-            padding: 12px 14px;
+            padding: var(--space-lg) 14px var(--space-md);
         }
 
         .card-title {
             font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            line-height: 1.3;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.4;
+            color: var(--label-primary);
+            letter-spacing: -0.01em;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -173,7 +273,8 @@
 
         .card-desc {
             font-size: 13px;
-            color: var(--text-sub);
+            color: var(--label-secondary);
+            line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -185,15 +286,15 @@
             display: none;
         }
 
-        /* B站视频响应式 16:9 比例容器 */
+        /* 视频容器 */
         .video-player-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 56.25%;
             background: #000;
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-md);
         }
 
         .video-player-container iframe {
@@ -206,58 +307,101 @@
         }
 
         .detail-content {
-            margin-top: 16px;
+            margin-top: var(--space-2xl);
         }
 
         .detail-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            line-height: 1.4;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            color: var(--label-primary);
         }
 
+        /* 信息卡片组 - Apple Grouped Style */
         .info-section {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg) var(--space-xl);
+            margin-bottom: var(--space-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .section-label {
-            font-size: 13px;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--label-tertiary);
+            margin-bottom: var(--space-sm);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.08em;
         }
 
         .section-text {
-            font-size: 14px;
+            font-size: 15px;
             line-height: 1.6;
-            color: var(--text-main);
-            white-space: pre-wrap; /* 支持文本换行 */
+            color: var(--label-primary);
+            white-space: pre-wrap;
+            letter-spacing: -0.01em;
         }
 
+        /* 演职人员 - Apple List Style */
         .credits-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px 16px;
-            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: var(--space-xs);
         }
 
         .credit-item {
-            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            padding: var(--space-sm) 0;
+            border-bottom: 0.5px solid var(--separator-color);
+        }
+
+        .credit-item:last-child {
+            border-bottom: none;
         }
 
         .credit-role {
-            color: var(--text-sub);
+            color: var(--label-secondary);
+            font-weight: 400;
         }
 
         .credit-name {
             font-weight: 500;
-            color: var(--text-main);
+            color: var(--label-primary);
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: var(--space-lg);
+        }
+
+        /* === 页面切换动画 === */
+        .fade-enter {
+            animation: fadeIn var(--duration-normal) var(--ease-out);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === 空状态 === */
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            color: var(--label-tertiary);
+            padding: 60px 0;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -266,7 +410,7 @@
     <!-- 顶部导航栏 -->
     <header class="header">
         <button class="back-btn" id="backBtn" onclick="showListView()">← 返回</button>
-        <div class="header-title" id="headerTitle">社团优秀作品展</div>
+        <div class="header-title" id="headerTitle">树莓社作品集</div>
         <div style="width: 40px;"></div> <!-- 占位保持居中 -->
     </header>
 
@@ -323,18 +467,32 @@
             {
                 id: "1",
                 category: "original", // 对应：original(原创作品), digital(数字媒体), campus(校园传媒)
-                categoryName: "原创作品",
-                title: "【原创微电影】《深梅的夏日故事》",
-                cover: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80", // 封面图URL
+                categoryName: "原创微电影",
+                title: "爆肝559天，一群高中生将治愈故事拍成了短片｜树莓社原创微电影｜识茶记",
+                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg", // 封面图URL
                 bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
-                desc: "本部作品由社团影视部历时三个月制作，讲述了青春校园里的梦想与坚持。",
-                activity: "2024年春季学期校园微电影大赛特等奖作品；深梅社团年度重磅联合出品。",
+                desc: "老墙业已斑驳，树干历经沧桑，惟新刷上漆的长椅显得格外鲜艳。而每当与好友一起喝着奶茶，走过树荫下静坐的长椅，仿佛总能看见四个坐在椅子上的少年、听见剧组成员吵吵闹闹的欢笑、想起那一段名为「识茶记」的、由奶茶系起的动人故事……\n主题曲：涙そうそう",
+                activity: "2020-2021年苏州中学树莓社影视作品代表作。",
                 credits: [
-                    { role: "导演", name: "张三" },
-                    { role: "编剧", name: "李四" },
-                    { role: "摄影", name: "王五" },
-                    { role: "剪辑/调色", name: "赵六" },
-                    { role: "主演", name: "社团戏剧部全体" }
+                    { role: "导演", name: "李令剑" },
+                    { role: "编剧", name: "陈天一" },
+                    { role: "制片", name: "沈孙丰" },
+                    { role: "监制", name: "马雨璋" },
+                    { role: "选角导演", name: "陈天一、徐杰、彭嘉仪、沈孙丰、李令剑、谭嘉怡" },
+                    { role: "场记", name: "徐皓玥、彭嘉仪、任好" },
+                    { role: "演员", name: "江昊林、金心远、沈彦希、钱宸、叶卓、张研南" },
+                    { role: "摄影指导", name: "沈孙丰" },
+                    { role: "摄影", name: "沈孙丰、马雨璋、朱奕、叶卓" },
+                    { role: "摄影助理", name: "赵晴柔" },
+                    { role: "灯光", name: "叶卓" },
+                    { role: "录音", name: "何怿阳、张研南" },
+                    { role: "混音", name: "顾衡庭" },
+                    { role: "美术", name: "彭嘉仪、虞思辰" },
+                    { role: "化妆", name: "李文博" },
+                    { role: "剧照", name: "朱奕" },
+                    { role: "剪辑", name: "沈孙丰、江长坤、刘欣怡" },
+                    { role: "调色", name: "沈孙丰" },
+                    { role: "场务", name: "范奕凡、杨乐天" }
                 ]
             },
             {
@@ -389,7 +547,7 @@
                 : data.filter(item => item.category === currentCategory);
 
             if (filteredData.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px 0;">该分类下暂无作品</div>';
+                grid.innerHTML = '<div class="empty-state">该分类下暂无作品</div>';
                 return;
             }
 
@@ -458,6 +616,9 @@
             // 切换视图
             document.getElementById('list-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
+            document.getElementById('detail-view').classList.remove('fade-enter');
+            void document.getElementById('detail-view').offsetWidth;
+            document.getElementById('detail-view').classList.add('fade-enter');
             document.getElementById('backBtn').style.display = 'block';
             document.getElementById('headerTitle').innerText = work.categoryName;
 
@@ -473,8 +634,11 @@
             // 切换视图
             document.getElementById('detail-view').style.display = 'none';
             document.getElementById('list-view').style.display = 'block';
+            document.getElementById('list-view').classList.remove('fade-enter');
+            void document.getElementById('list-view').offsetWidth;
+            document.getElementById('list-view').classList.add('fade-enter');
             document.getElementById('backBtn').style.display = 'none';
-            document.getElementById('headerTitle').innerText = '社团优秀作品展';
+            document.getElementById('headerTitle').innerText = '树莓社作品集';
 
             window.scrollTo(0, 0);
         }
