@@ -335,10 +335,9 @@
 
         .credit-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px;
-            padding: var(--space-sm) 0;
+            flex-direction: column;
+            gap: 2px;
+            padding: var(--space-md) 0;
             border-bottom: 0.5px solid var(--separator-color);
         }
 
@@ -347,16 +346,19 @@
         }
 
         .credit-role {
-            color: var(--label-secondary);
-            font-weight: 400;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--label-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
 
         .credit-name {
+            font-size: 15px;
             font-weight: 500;
             color: var(--label-primary);
-            text-align: right;
-            flex-shrink: 0;
-            margin-left: var(--space-lg);
+            line-height: 1.4;
+            letter-spacing: -0.01em;
         }
 
         /* === 页面切换动画 === */
@@ -468,36 +470,6 @@
                     { role: "调色", name: "沈孙丰" },
                     { role: "场务", name: "范奕凡、杨乐天" }
                 ]
-            },
-            {
-                id: "2",
-                category: "digital",
-                categoryName: "数字媒体",
-                title: "【数媒CG动画】《未来科技展演片头》",
-                cover: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-                bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
-                desc: "使用 Blender 与 AE 制作的三维视觉展演动画，展示数字艺术的独特性。",
-                activity: "2024 校科技艺术节开幕式特邀展播视频。",
-                credits: [
-                    { role: "3D建模", name: "小明" },
-                    { role: "特效/合成", name: "小红" },
-                    { role: "音效设计", name: "小刚" }
-                ]
-            },
-            {
-                id: "3",
-                category: "campus",
-                categoryName: "校园传媒",
-                title: "【校园新闻】2024社团招新晚会全程回顾",
-                cover: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80",
-                bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
-                desc: "记录了招新晚会精彩瞬间，包含多个社团的优秀节目集锦与采访。",
-                activity: "校园传媒部日常采编记录，展现丰富多彩的大学社团生活。",
-                credits: [
-                    { role: "总策划", name: "社长" },
-                    { role: "外采记者", name: "社员A, 社员B" },
-                    { role: "后期包装", name: "传媒部" }
-                ]
             }
         ];
 
@@ -582,7 +554,7 @@
             const creditsContainer = document.getElementById('detailCredits');
             creditsContainer.innerHTML = work.credits.map(c => `
                 <div class="credit-item">
-                    <span class="credit-role">${c.role}：</span>
+                    <span class="credit-role">${c.role}</span>
                     <span class="credit-name">${c.name}</span>
                 </div>
             `).join('');
