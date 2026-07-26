@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>社团作品展示</title>
+    <style>
+        /* === 基础样式与变量 === */
+        :root {
+            --primary-color: #E91E63; /* 社团主题色（粉红/莓果色） */
+            --bg-color: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-main: #212121;
+            --text-sub: #666666;
+            --border-color: #EEEEEE;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding-bottom: 24px;
+        }
+
+        /* === 顶部导航 === */
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 52px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .back-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
+            padding: 4px 8px 4px 0;
+        }
+
+        /* === 分类 Tab === */
+        .category-tabs {
+            display: flex;
+            background: #fff;
+            padding: 8px 16px;
+            gap: 8px;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border-color);
+            scrollbar-width: none;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: #F1F3F5;
+            color: var(--text-sub);
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* === 列表页样式 === */
+        .view-container {
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 600px) {
+            .works-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .work-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .work-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-cover-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 */
+            background-color: #E0E0E0;
+        }
+
+        .card-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
+        }
+
+        .card-info {
+            padding: 12px 14px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--text-sub);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* === 详情/播放器页样式 === */
+        #detail-view {
+            display: none;
+        }
+
+        /* B站视频响应式 16:9 比例容器 */
+        .video-player-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .video-player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .detail-content {
+            margin-top: 16px;
+        }
+
+        .detail-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .info-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+            white-space: pre-wrap; /* 支持文本换行 */
+        }
+
+        .credits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 16px;
+            margin-top: 4px;
+        }
+
+        .credit-item {
+            font-size: 13px;
+        }
+
+        .credit-role {
+            color: var(--text-sub);
+        }
+
+        .credit-name {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <button class="back-btn" id="backBtn" onclick="showListView()">← 返回</button>
+        <div class="header-title" id="headerTitle">社团优秀作品展</div>
+        <div style="width: 40px;"></div> <!-- 占位保持居中 -->
+    </header>
+
+    <!-- 列表视图 -->
+    <div id="list-view">
+        <!-- 分类 Tab 栏 -->
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all', this)">全部作品</button>
+            <button class="tab-btn" onclick="filterCategory('original', this)">原创作品</button>
+            <button class="tab-btn" onclick="filterCategory('digital', this)">数字媒体</button>
+            <button class="tab-btn" onclick="filterCategory('campus', this)">校园传媒</button>
+        </div>
+
+        <div class="view-container">
+            <div class="works-grid" id="worksGrid"></div>
+        </div>
+    </div>
+
+    <!-- 详情/播放器视图 -->
+    <div id="detail-view">
+        <div class="view-container">
+            <!-- 16:9 响应式视频播放器 -->
+            <div class="video-player-container" id="playerWrapper"></div>
+
+            <div class="detail-content">
+                <h1 class="detail-title" id="detailTitle"></h1>
+
+                <!-- 简介 -->
+                <div class="info-section">
+                    <div class="section-label">作品简介</div>
+                    <div class="section-text" id="detailDesc"></div>
+                </div>
+
+                <!-- 活动介绍 -->
+                <div class="info-section">
+                    <div class="section-label">活动背景 / 介绍</div>
+                    <div class="section-text" id="detailActivity"></div>
+                </div>
+
+                <!-- 演职人员 -->
+                <div class="info-section">
+                    <div class="section-label">演职人员 (Credits)</div>
+                    <div class="credits-grid" id="detailCredits"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 【社团作品数据源】在这里增加或修改你的作品！
+        // ==========================================
+        const worksData = [
+            {
+                id: "1",
+                category: "original", // 对应：original(原创作品), digital(数字媒体), campus(校园传媒)
+                categoryName: "原创作品",
+                title: "【原创微电影】《深梅的夏日故事》",
+                cover: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80", // 封面图URL
+                bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
+                desc: "本部作品由社团影视部历时三个月制作，讲述了青春校园里的梦想与坚持。",
+                activity: "2024年春季学期校园微电影大赛特等奖作品；深梅社团年度重磅联合出品。",
+                credits: [
+                    { role: "导演", name: "张三" },
+                    { role: "编剧", name: "李四" },
+                    { role: "摄影", name: "王五" },
+                    { role: "剪辑/调色", name: "赵六" },
+                    { role: "主演", name: "社团戏剧部全体" }
+                ]
+            },
+            {
+                id: "2",
+                category: "digital",
+                categoryName: "数字媒体",
+                title: "【数媒CG动画】《未来科技展演片头》",
+                cover: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+                bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
+                desc: "使用 Blender 与 AE 制作的三维视觉展演动画，展示数字艺术的独特性。",
+                activity: "2024 校科技艺术节开幕式特邀展播视频。",
+                credits: [
+                    { role: "3D建模", name: "小明" },
+                    { role: "特效/合成", name: "小红" },
+                    { role: "音效设计", name: "小刚" }
+                ]
+            },
+            {
+                id: "3",
+                category: "campus",
+                categoryName: "校园传媒",
+                title: "【校园新闻】2024社团招新晚会全程回顾",
+                cover: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80",
+                bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
+                desc: "记录了招新晚会精彩瞬间，包含多个社团的优秀节目集锦与采访。",
+                activity: "校园传媒部日常采编记录，展现丰富多彩的大学社团生活。",
+                credits: [
+                    { role: "总策划", name: "社长" },
+                    { role: "外采记者", name: "社员A, 社员B" },
+                    { role: "后期包装", name: "传媒部" }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // 逻辑控制代码
+        // ==========================================
+        let currentCategory = 'all';
+
+        // 初始化页面
+        window.addEventListener('DOMContentLoaded', () => {
+            renderWorksList(worksData);
+        });
+
+        // 渲染列表
+        function renderWorksList(data) {
+            const grid = document.getElementById('worksGrid');
+            grid.innerHTML = '';
+
+            const filteredData = currentCategory === 'all' 
+                ? data 
+                : data.filter(item => item.category === currentCategory);
+
+            if (filteredData.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px 0;">该分类下暂无作品</div>';
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'work-card';
+                card.onclick = () => openDetailView(item.id);
+
+                card.innerHTML = `
+                    <div class="card-cover-wrapper">
+                        <img class="card-cover" src="${item.cover}" alt="${item.title}" loading="lazy">
+                        <span class="card-tag">${item.categoryName}</span>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${item.title}</div>
+                        <div class="card-desc">${item.desc}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 分类筛选
+        function filterCategory(category, btnElement) {
+            currentCategory = category;
+            
+            // 更新 Tab 选中状态
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            renderWorksList(worksData);
+        }
+
+        // 打开详情页
+        function openDetailView(workId) {
+            const work = worksData.find(item => item.id === workId);
+            if (!work) return;
+
+            // 填写详情信息
+            document.getElementById('detailTitle').innerText = work.title;
+            document.getElementById('detailDesc').innerText = work.desc;
+            document.getElementById('detailActivity').innerText = work.activity;
+
+            // 动态嵌入 B站 iFrame 播放器
+            const playerWrapper = document.getElementById('playerWrapper');
+            playerWrapper.innerHTML = `
+                <iframe 
+                    src="${work.bilibiliSrc}" 
+                    scrolling="no" 
+                    border="0" 
+                    frameborder="no" 
+                    framespacing="0" 
+                    allowfullscreen="true">
+                </iframe>
+            `;
+
+            // 渲染演职人员
+            const creditsContainer = document.getElementById('detailCredits');
+            creditsContainer.innerHTML = work.credits.map(c => `
+                <div class="credit-item">
+                    <span class="credit-role">${c.role}：</span>
+                    <span class="credit-name">${c.name}</span>
+                </div>
+            `).join('');
+
+            // 切换视图
+            document.getElementById('list-view').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'block';
+            document.getElementById('backBtn').style.display = 'block';
+            document.getElementById('headerTitle').innerText = work.categoryName;
+
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 返回列表页
+        function showListView() {
+            // 清空播放器（停止视频播放）
+            document.getElementById('playerWrapper').innerHTML = '';
+
+            // 切换视图
+            document.getElementById('detail-view').style.display = 'none';
+            document.getElementById('list-view').style.display = 'block';
+            document.getElementById('backBtn').style.display = 'none';
+            document.getElementById('headerTitle').innerText = '社团优秀作品展';
+
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
