@@ -286,6 +286,207 @@
             border: 0;
         }
 
+        /* === 音频/广播播放器 === */
+        .audio-player-container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .audio-cover-wrapper {
+            width: 100%;
+            aspect-ratio: 1;
+            max-width: 320px;
+            margin: 0 auto var(--space-xl);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--bg-tertiary);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .audio-cover-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s var(--ease-out);
+        }
+
+        .audio-cover-wrapper.playing img {
+            transform: scale(1.05);
+        }
+
+        .audio-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--accent-color);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
+        }
+
+        .audio-info {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .audio-episode {
+            font-size: 13px;
+            color: var(--label-tertiary);
+            margin-bottom: 4px;
+            letter-spacing: 0.02em;
+        }
+
+        .audio-player-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--label-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .audio-player-subtitle {
+            font-size: 14px;
+            color: var(--label-secondary);
+        }
+
+        .audio-progress-container {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .audio-time {
+            font-size: 12px;
+            color: var(--label-tertiary);
+            font-variant-numeric: tabular-nums;
+            min-width: 36px;
+        }
+
+        .audio-time.current {
+            text-align: left;
+        }
+
+        .audio-time.duration {
+            text-align: right;
+        }
+
+        .audio-progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: height 0.15s ease;
+        }
+
+        .audio-progress-bar:hover {
+            height: 8px;
+        }
+
+        .audio-progress-bar:hover .audio-progress-fill {
+            background: var(--accent-color-secondary);
+        }
+
+        .audio-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-color);
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2xl);
+        }
+
+        .audio-ctrl-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--label-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all var(--duration-fast) var(--ease-out);
+            font-family: inherit;
+        }
+
+        .audio-ctrl-btn:active {
+            transform: scale(0.92);
+        }
+
+        .audio-ctrl-btn.speed-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--label-secondary);
+        }
+
+        .audio-ctrl-btn.speed-btn.active {
+            color: var(--accent-color);
+        }
+
+        .audio-ctrl-btn.rewind-btn {
+            width: 36px;
+            height: 36px;
+            color: var(--label-secondary);
+        }
+
+        .audio-ctrl-btn.rewind-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .audio-play-btn {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(255, 45, 85, 0.3);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .audio-play-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 45, 85, 0.4);
+            transform: scale(1.04);
+        }
+
+        .audio-play-btn:active {
+            transform: scale(0.96);
+        }
+
+        .audio-play-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .audio-ctrl-btn.speed-btn.active {
+                color: var(--accent-color);
+            }
+        }
+
         .detail-content {
             margin-top: var(--space-2xl);
         }
@@ -442,10 +643,11 @@
         const worksData = [
             {
                 id: "1",
-                category: "original", // 对应：original(原创作品), digital(数字媒体), campus(校园传媒)
+                type: "video",
+                category: "original",
                 categoryName: "原创微电影",
                 title: "爆肝559天，一群高中生将治愈故事拍成了短片｜树莓社原创微电影｜识茶记",
-                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg", // 封面图URL
+                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg",
                 bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
                 desc: "老墙业已斑驳，树干历经沧桑，惟新刷上漆的长椅显得格外鲜艳。而每当与好友一起喝着奶茶，走过树荫下静坐的长椅，仿佛总能看见四个坐在椅子上的少年、听见剧组成员吵吵闹闹的欢笑、想起那一段名为「识茶记」的、由奶茶系起的动人故事……\n主题曲：涙そうそう",
                 activity: "2020-2021年苏州中学树莓社影视作品代表作。",
@@ -469,6 +671,78 @@
                     { role: "剪辑", name: "沈孙丰、江长坤、刘欣怡" },
                     { role: "调色", name: "沈孙丰" },
                     { role: "场务", name: "范奕凡、杨乐天" }
+                ]
+            },
+            {
+                id: "2",
+                type: "audio",
+                category: "campus",
+                categoryName: "校园广播",
+                title: "问道山下 · 2026第01期",
+                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg",
+                audioSrc: "broadcast/问道山下_2026第01期_20260401.mp3",
+                episodeDate: "2026年4月1日",
+                duration: "15分钟",
+                desc: "苏州中学传媒中心「问道山下」校园广播 2026 年第 1 期。聚焦校园文化，讲述山中故事。",
+                activity: "「问道山下」是苏州中学树莓社·苏中学生传媒中心出品的校园广播节目，每期围绕一个主题，带大家走进校园内外的有趣故事。",
+                credits: [
+                    { role: "出品", name: "树莓社 · 苏中学生传媒中心" },
+                    { role: "主播", name: "校园广播站" },
+                    { role: "后期制作", name: "树莓社" }
+                ]
+            },
+            {
+                id: "3",
+                type: "audio",
+                category: "campus",
+                categoryName: "校园广播",
+                title: "问道山下 · 2026第01期（4月30日）",
+                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg",
+                audioSrc: "broadcast/问道山下_2026第01期_20260430.mp3",
+                episodeDate: "2026年4月30日",
+                duration: "15分钟",
+                desc: "苏州中学传媒中心「问道山下」校园广播 2026 年第 1 期（4月30日播出版本）。聚焦校园文化，讲述山中故事。",
+                activity: "「问道山下」是苏州中学树莓社·苏中学生传媒中心出品的校园广播节目，每期围绕一个主题，带大家走进校园内外的有趣故事。",
+                credits: [
+                    { role: "出品", name: "树莓社 · 苏中学生传媒中心" },
+                    { role: "主播", name: "校园广播站" },
+                    { role: "后期制作", name: "树莓社" }
+                ]
+            },
+            {
+                id: "4",
+                type: "audio",
+                category: "campus",
+                categoryName: "校园广播",
+                title: "问道山下 · 2026第02期",
+                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg",
+                audioSrc: "broadcast/问道山下_2026第02期_20260515.mp3",
+                episodeDate: "2026年5月15日",
+                duration: "15分钟",
+                desc: "苏州中学传媒中心「问道山下」校园广播 2026 年第 2 期。聚焦校园文化，讲述山中故事。",
+                activity: "「问道山下」是苏州中学树莓社·苏中学生传媒中心出品的校园广播节目，每期围绕一个主题，带大家走进校园内外的有趣故事。",
+                credits: [
+                    { role: "出品", name: "树莓社 · 苏中学生传媒中心" },
+                    { role: "主播", name: "校园广播站" },
+                    { role: "后期制作", name: "树莓社" }
+                ]
+            },
+            {
+                id: "5",
+                type: "audio",
+                category: "campus",
+                categoryName: "校园广播",
+                title: "问道山下 · 2026第03期",
+                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg",
+                audioSrc: "broadcast/问道山下_2026第03期_20260529.mp3",
+                episodeDate: "2026年5月29日",
+                duration: "15分钟",
+                desc: "苏州中学传媒中心「问道山下」校园广播 2026 年第 3 期。聚焦校园文化，讲述山中故事。",
+                activity: "「问道山下」是苏州中学树莓社·苏中学生传媒中心出品的校园广播节目，每期围绕一个主题，带大家走进校园内外的有趣故事。",
+                credits: [
+                    { role: "出品", name: "树莓社 · 苏中学生传媒中心" },
+                    { role: "主播", name: "校园广播站" },
+                    { role: "后期制作", name: "树莓社" }
                 ]
             }
         ];
@@ -527,18 +801,122 @@
             renderWorksList(worksData);
         }
 
-        // 打开详情页
-        function openDetailView(workId) {
-            const work = worksData.find(item => item.id === workId);
-            if (!work) return;
+        let currentAudio = null;
 
-            // 填写详情信息
-            document.getElementById('detailTitle').innerText = work.title;
-            document.getElementById('detailDesc').innerText = work.desc;
-            document.getElementById('detailActivity').innerText = work.activity;
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' + s : s}`;
+        }
 
-            // 动态嵌入 B站 iFrame 播放器
+        function renderAudioPlayer(work) {
             const playerWrapper = document.getElementById('playerWrapper');
+            playerWrapper.className = 'audio-player-container';
+            playerWrapper.innerHTML = `
+                <div class="audio-cover-wrapper" id="audioCoverWrapper">
+                    <img src="${work.cover}" alt="${work.title}">
+                    <div class="audio-badge">广播</div>
+                </div>
+                <div class="audio-info">
+                    <div class="audio-episode">${work.episodeDate || ''}</div>
+                    <div class="audio-player-title">${work.title}</div>
+                    <div class="audio-player-subtitle">${work.duration || ''}</div>
+                </div>
+                <div class="audio-progress-container">
+                    <span class="audio-time current" id="audioCurrentTime">0:00</span>
+                    <div class="audio-progress-bar" id="audioProgressBar">
+                        <div class="audio-progress-fill" id="audioProgressFill"></div>
+                    </div>
+                    <span class="audio-time duration" id="audioDuration">0:00</span>
+                </div>
+                <div class="audio-controls">
+                    <button class="audio-ctrl-btn speed-btn" id="speedBtn" data-speed="1">1x</button>
+                    <button class="audio-play-btn" id="audioPlayBtn">
+                        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button class="audio-ctrl-btn rewind-btn" id="rewindBtn" title="后退15秒">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9"/>
+                            <polyline points="3 4 3 10 9 10"/>
+                        </svg>
+                    </button>
+                </div>
+                <audio id="audioElement" src="${work.audioSrc}" preload="metadata"></audio>
+            `;
+
+            const audio = document.getElementById('audioElement');
+            const playBtn = document.getElementById('audioPlayBtn');
+            const playIcon = document.getElementById('playIcon');
+            const pauseIcon = document.getElementById('pauseIcon');
+            const progressBar = document.getElementById('audioProgressBar');
+            const progressFill = document.getElementById('audioProgressFill');
+            const currentTimeEl = document.getElementById('audioCurrentTime');
+            const durationEl = document.getElementById('audioDuration');
+            const speedBtn = document.getElementById('speedBtn');
+            const rewindBtn = document.getElementById('rewindBtn');
+            const coverWrapper = document.getElementById('audioCoverWrapper');
+
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+            }
+            currentAudio = audio;
+
+            audio.addEventListener('loadedmetadata', () => {
+                durationEl.innerText = formatTime(audio.duration);
+            });
+
+            audio.addEventListener('timeupdate', () => {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressFill.style.width = percent + '%';
+                currentTimeEl.innerText = formatTime(audio.currentTime);
+            });
+
+            audio.addEventListener('play', () => {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                coverWrapper.classList.add('playing');
+            });
+
+            audio.addEventListener('pause', () => {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                coverWrapper.classList.remove('playing');
+            });
+
+            playBtn.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+            });
+
+            progressBar.addEventListener('click', (e) => {
+                const rect = progressBar.getBoundingClientRect();
+                const ratio = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = ratio * audio.duration;
+            });
+
+            const speeds = [1, 1.25, 1.5, 2];
+            let speedIndex = 0;
+            speedBtn.addEventListener('click', () => {
+                speedIndex = (speedIndex + 1) % speeds.length;
+                const newSpeed = speeds[speedIndex];
+                audio.playbackRate = newSpeed;
+                speedBtn.innerText = newSpeed + 'x';
+                speedBtn.classList.toggle('active', newSpeed !== 1);
+            });
+
+            rewindBtn.addEventListener('click', () => {
+                audio.currentTime = Math.max(0, audio.currentTime - 15);
+            });
+        }
+
+        function renderVideoPlayer(work) {
+            const playerWrapper = document.getElementById('playerWrapper');
+            playerWrapper.className = 'video-player-container';
             playerWrapper.innerHTML = `
                 <iframe 
                     src="${work.bilibiliSrc}" 
@@ -549,6 +927,24 @@
                     allowfullscreen="true">
                 </iframe>
             `;
+        }
+
+        // 打开详情页
+        function openDetailView(workId) {
+            const work = worksData.find(item => item.id === workId);
+            if (!work) return;
+
+            // 填写详情信息
+            document.getElementById('detailTitle').innerText = work.title;
+            document.getElementById('detailDesc').innerText = work.desc;
+            document.getElementById('detailActivity').innerText = work.activity;
+
+            // 根据类型渲染播放器
+            if (work.type === 'audio') {
+                renderAudioPlayer(work);
+            } else {
+                renderVideoPlayer(work);
+            }
 
             // 渲染演职人员
             const creditsContainer = document.getElementById('detailCredits');
@@ -572,7 +968,13 @@
 
         // 返回列表页
         function showListView() {
-            // 清空播放器（停止视频播放）
+            // 停止音频播放
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            // 清空播放器
             document.getElementById('playerWrapper').innerHTML = '';
 
             // 切换视图
