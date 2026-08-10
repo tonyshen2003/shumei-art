@@ -658,133 +658,58 @@
         // ==========================================
         // 【社团作品数据源】在这里增加或修改你的作品！
         // ==========================================
-        const worksData = [
-            {
-                id: "1",
-                type: "video",
-                category: "original",
-                categoryName: "原创微电影",
-                title: "爆肝559天，一群高中生将治愈故事拍成了短片｜树莓社原创微电影｜识茶记",
-                cover: "276bb389037217dcacc5975db05b37aafb6fe791.jpg",
-                bilibiliSrc: "//player.bilibili.com/player.html?isOutside=true&aid=642082238&bvid=BV1EY4y1V7LL&cid=734935772&p=1",
-                desc: "老墙业已斑驳，树干历经沧桑，惟新刷上漆的长椅显得格外鲜艳。而每当与好友一起喝着奶茶，走过树荫下静坐的长椅，仿佛总能看见四个坐在椅子上的少年、听见剧组成员吵吵闹闹的欢笑、想起那一段名为「识茶记」的、由奶茶系起的动人故事……\n主题曲：涙そうそう",
-                activity: "2020-2021年苏州中学树莓社影视作品代表作。",
-                credits: [
-                    { role: "导演", name: "李令剑" },
-                    { role: "编剧", name: "陈天一" },
-                    { role: "制片", name: "沈孙丰" },
-                    { role: "监制", name: "马雨璋" },
-                    { role: "选角导演", name: "陈天一、徐杰、彭嘉仪、沈孙丰、李令剑、谭嘉怡" },
-                    { role: "场记", name: "徐皓玥、彭嘉仪、任好" },
-                    { role: "演员", name: "江昊林、金心远、沈彦希、钱宸、叶卓、张研南" },
-                    { role: "摄影指导", name: "沈孙丰" },
-                    { role: "摄影", name: "沈孙丰、马雨璋、朱奕、叶卓" },
-                    { role: "摄影助理", name: "赵晴柔" },
-                    { role: "灯光", name: "叶卓" },
-                    { role: "录音", name: "何怿阳、张研南" },
-                    { role: "混音", name: "顾衡庭" },
-                    { role: "美术", name: "彭嘉仪、虞思辰" },
-                    { role: "化妆", name: "李文博" },
-                    { role: "剧照", name: "朱奕" },
-                    { role: "剪辑", name: "沈孙丰、江长坤、刘欣怡" },
-                    { role: "调色", name: "沈孙丰" },
-                    { role: "场务", name: "范奕凡、杨乐天" }
-                ]
-            },
-            {
-                id: "2",
-                type: "audio",
-                category: "campus",
-                categoryName: "校园广播",
-                title: "问道山下 · 2026第01期",
-                cover: "传媒中心.jpg",
-                audioSrc: "broadcast/问道山下_2026第01期_20260430-播客版.mp3",
-                episodeDate: "2026年4月30日（12:10-12:25）",
-                duration: "15分钟",
-                desc: "本期为《问道山下》2026 年首期节目，聚焦苏中春日校园生活，播报\u201c伟民杯\u201d高一排球赛、高二足球班赛等校园赛事，纪实高一春季研学（苏州科技馆、狮子山）实践历程，分享根与芽社公益捐书、高中生创新能力大赛华东赛区复赛等校园动态，搭配法语音乐剧《红与黑》经典曲目，展现苏中少年青春风貌与成长思考，传递温暖向上的校园力量。",
-                activity: "【筹划时间】4月15日至4月28日\n【播出时间】4月30日中午（计划12:10-12:25）\n【播出形式】在苏州中学校园内道路旁的音响、所有年级教室内播放音频\n【歌曲投稿】Écouter son cœur",
-                credits: [
-                    { role: "撰稿", name: "孙夕涵" },
-                    { role: "本期主持", name: "孙夕涵、刘铭泽" },
-                    { role: "后期制作", name: "黄柯睿、沈孙丰" },
-                    { role: "制片", name: "郎致远" },
-                    { role: "总制片", name: "雒安琪" },
-                    { role: "技术顾问", name: "沈孙丰、叶卓、顾衡庭" },
-                    { role: "联合出品", name: "苏州中学学生传媒中心、苏州中学树莓社" },
-                    { role: "指导老师", name: "刘勤、李超、崔峥嵘" }
-                ]
-            },
-            {
-                id: "3",
-                type: "audio",
-                category: "campus",
-                categoryName: "校园广播",
-                title: "问道山下 · 2026第02期",
-                cover: "传媒中心.jpg",
-                audioSrc: "broadcast/问道山下_2026第02期_20260515-播客版.mp3",
-                episodeDate: "2026年5月15日（12:10-12:25）",
-                duration: "15分钟",
-                desc: "本期为《问道山下》2026 年第 02 期节目，聚焦五月苏中校园生活，播报\u201c拾光筑梦，乐动青春\u201d原创校园歌曲大赛盛况，纪实高二南浔古镇研学与企业实践历程，分享校园摄影大师赛预告、足球赛进展及心理剧赛事动态，聚焦期中考试专题并致敬五四青年节，搭配原创歌曲《玉兰白》等曲目，展现苏中少年青春活力与成长思考，传递温暖昂扬的校园力量。",
-                activity: "【筹划时间】5月1日至5月13日\n【播出时间】5月15日中午（计划12:10-12:25）\n【播出形式】在苏州中学校园内道路旁的音响、所有年级教室内播放音频",
-                credits: [
-                    { role: "撰稿", name: "孙夕涵、刘铭泽" },
-                    { role: "本期主持", name: "孙夕涵、徐欣彤" },
-                    { role: "后期制作", name: "黄柯睿、沈孙丰" },
-                    { role: "制片", name: "郎致远" },
-                    { role: "总制片", name: "雒安琪" },
-                    { role: "技术顾问", name: "沈孙丰、叶卓" },
-                    { role: "联合出品", name: "苏州中学学生传媒中心、苏州中学树莓社" },
-                    { role: "指导老师", name: "刘勤、李超、崔峥嵘" }
-                ]
-            },
-            {
-                id: "4",
-                type: "audio",
-                category: "campus",
-                categoryName: "校园广播",
-                title: "问道山下 · 2026第03期",
-                cover: "传媒中心.jpg",
-                audioSrc: "broadcast/问道山下_2026第03期_20260529-播客版.mp3",
-                episodeDate: "2026年5月29日（12:10-12:25）",
-                duration: "15分钟",
-                desc: "本期为《问道山下》2026 年第 03 期节目，播报高一羽毛球班赛、原创心理剧预赛、寻找好声音海选展演及第十一届诗词大会总决赛等校园赛事动态，聚焦高考前夕为学长加油助威的特色板块，搭配《M.O》《去明天》等曲目，展现苏中少年青春活力与温暖情谊，传递昂扬向上的校园力量。",
-                activity: "【筹划时间】5月14日至5月28日\n【播出时间】5月29日中午（计划12:10-12:25）\n【播出形式】在苏州中学校园内道路旁的音响、所有年级教室内播放音频\n【歌曲投稿】M.O、《去明天》",
-                credits: [
-                    { role: "撰稿", name: "孙夕涵、刘铭泽" },
-                    { role: "本期主持", name: "郎致远、丁俊熙" },
-                    { role: "后期制作", name: "黄柯睿、沈孙丰" },
-                    { role: "制片", name: "郎致远" },
-                    { role: "总制片", name: "雒安琪" },
-                    { role: "技术顾问", name: "沈孙丰、叶卓" },
-                    { role: "联合出品", name: "苏州中学学生传媒中心、苏州中学树莓社" },
-                    { role: "指导老师", name: "刘勤、李超、崔峥嵘" }
-                ]
-            },
-            {
-                id: "5",
-                type: "audio",
-                category: "campus",
-                categoryName: "校园广播",
-                title: "问道山下 · 2026第04期",
-                cover: "传媒中心.jpg",
-                audioSrc: "broadcast/问道山下_2026第01期_20260401-播客版.mp3",
-                episodeDate: "2026年6月5日（12:10-12:25）",
-                duration: "15分钟",
-                desc: "本期为《问道山下》2026 年第 04 期节目，播报苏中好声音决赛、高一原创心理剧大赛决赛、高二足球决赛及高一羽毛球班级赛等校园赛事结果，聚焦期末考试祝福特色板块，搭配好声音决赛现场录音及 Frank Ocean 等曲目，展现苏中少年青春活力与温暖情谊，为本学期画上圆满句号。",
-                activity: "【筹划时间】5月25日至6月4日\n【播出时间】6月5日中午（计划12:10-12:25）\n【播出形式】在苏州中学校园内道路旁的音响、所有年级教室内播放音频\n【歌曲投稿】Thinkin Bout You、好声音决赛现场录音",
-                credits: [
-                    { role: "撰稿", name: "孙夕涵、刘铭泽" },
-                    { role: "本期主持", name: "殷豪程、韩咏延" },
-                    { role: "特色板块主持", name: "夏攸然、李思萱" },
-                    { role: "后期制作", name: "黄柯睿、沈孙丰" },
-                    { role: "制片", name: "郎致远" },
-                    { role: "总制片", name: "雒安琪" },
-                    { role: "技术顾问", name: "沈孙丰、叶卓" },
-                    { role: "联合出品", name: "苏州中学学生传媒中心、苏州中学树莓社" },
-                    { role: "指导老师", name: "刘勤、李超、崔峥嵘" }
-                ]
+        let worksData = [];
+
+        // CSV 解析器（支持引号转义，兼容标准的 CSV 表格）
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], field = '', inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (inQuotes) {
+                    if (c === '"') {
+                        if (text[i + 1] === '"') { field += '"'; i++; }
+                        else inQuotes = false;
+                    } else field += c;
+                } else if (c === '"') {
+                    inQuotes = true;
+                } else if (c === ',') {
+                    row.push(field); field = '';
+                } else if (c === '\n' || c === '\r') {
+                    if (c === '\r' && text[i + 1] === '\n') i++;
+                    if (field !== '' || row.length > 0) { row.push(field); rows.push(row); row = []; field = ''; }
+                } else field += c;
             }
-        ];
+            if (field !== '' || row.length > 0) { row.push(field); rows.push(row); }
+            return rows;
+        }
+
+        // 从 works.csv 表格加载作品数据（新作品只需在表格里加一行）
+        async function loadWorks() {
+            const res = await fetch('works.csv');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const text = await res.text();
+            const rows = parseCSV(text);
+            const header = rows[0].map(h => h.trim());
+            const idx = Object.fromEntries(header.map((h, i) => [h, i]));
+            return rows.slice(1).map(r => {
+                const get = (k) => r[idx[k]] === undefined ? '' : r[idx[k]].trim();
+                return {
+                    id: get('id'), type: get('type'), category: get('category'),
+                    categoryName: get('categoryName'), title: get('title'),
+                    cover: get('cover'), bilibiliSrc: get('bilibiliSrc'),
+                    audioSrc: get('audioSrc'), episodeDate: get('episodeDate'),
+                    duration: get('duration'),
+                    desc: get('desc').replace(/\\n/g, '\n'),
+                    activity: get('activity').replace(/\\n/g, '\n'),
+                    credits: get('credits') ? get('credits').split('|').filter(Boolean).map(c => {
+                        const i = c.indexOf(':');
+                        return { role: c.slice(0, i), name: c.slice(i + 1) };
+                    }) : []
+                };
+            }).filter(w => w.id !== '');
+        }
+
 
         // ==========================================
         // 逻辑控制代码
@@ -792,7 +717,12 @@
         let currentCategory = 'all';
 
         // 初始化页面
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                worksData = await loadWorks();
+            } catch (err) {
+                console.error('加载 works.csv 失败，请确认文件存在并通过 http 访问', err);
+            }
             renderWorksList(worksData);
         });
 
