@@ -99,3 +99,6 @@ logs/
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# 作品数据表（需要跟踪）
+!works.csv
