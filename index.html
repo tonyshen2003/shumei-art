@@ -351,6 +351,40 @@
             transition-duration: var(--duration-fast);
         }
 
+        /* 加载骨架屏 - Apple Skeleton Style */
+        .skeleton-card {
+            pointer-events: none;
+        }
+
+        .skeleton-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(100deg, var(--bg-tertiary) 40%, var(--bg-secondary) 50%, var(--bg-tertiary) 60%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.4s ease-in-out infinite;
+        }
+
+        .skeleton-line {
+            height: 14px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: linear-gradient(100deg, var(--bg-tertiary) 40%, var(--bg-secondary) 50%, var(--bg-tertiary) 60%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.4s ease-in-out infinite;
+        }
+
+        @keyframes skeletonShimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
         .card-cover-wrapper {
             position: relative;
             width: 100%;
@@ -1024,21 +1058,40 @@
         let currentSearch = '';
         let listScrollY = 0;
         let currentWorkId = null;
+        let loadError = false;
 
         // 初始化页面
         window.addEventListener('DOMContentLoaded', async () => {
+            renderSkeleton();
             try {
                 worksData = await loadWorks();
             } catch (err) {
                 console.error('加载 works.csv 失败，请确认文件存在并通过 http 访问', err);
+                loadError = true;
             }
             updateTabCounts();
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
                     currentSearch = searchInput.value;
-                    renderWorksList(worksData);
-                });
+            renderWorksList(worksData);
+        });
+
+        // 加载数据前先展示骨架屏，避免页面“空白/像没有作品”
+        function renderSkeleton(count = 8) {
+            const grid = document.getElementById('worksGrid');
+            grid.innerHTML = Array.from({ length: count }, () => `
+                <div class="work-card skeleton-card">
+                    <div class="card-cover-wrapper">
+                        <div class="skeleton-cover"></div>
+                    </div>
+                    <div class="card-info">
+                        <div class="skeleton-line" style="width:82%"></div>
+                        <div class="skeleton-line" style="width:58%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
             }
 
             const shareBtn = document.getElementById('shareBtn');
@@ -1114,7 +1167,10 @@
             });
 
             if (filteredData.length === 0) {
-                grid.innerHTML = `<div class="empty-state">${query ? '没有找到相关作品' : '该分类下暂无作品'}</div>`;
+                const emptyMessage = loadError
+                    ? '作品加载失败，请刷新重试'
+                    : (query ? '没有找到相关作品' : '该分类下暂无作品');
+                grid.innerHTML = `<div class="empty-state">${emptyMessage}</div>`;
                 return;
             }
 
