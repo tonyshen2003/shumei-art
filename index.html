@@ -155,10 +155,21 @@
             transform: scale(0.97);
         }
 
+        @media (min-width: 768px) {
+            .category-tabs {
+                justify-content: center;
+            }
+
+            .tab-btn {
+                padding: 8px 20px;
+                font-size: 15px;
+            }
+        }
+
         /* === 列表页容器 === */
         .view-container {
             padding: var(--space-lg) 20px;
-            max-width: 840px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -173,6 +184,12 @@
             .works-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: var(--space-2xl) var(--space-xl);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .works-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -488,6 +505,41 @@
             fill: currentColor;
         }
 
+        @media (min-width: 768px) {
+            .audio-player-container {
+                display: grid;
+                grid-template-columns: 280px 1fr;
+                grid-template-areas:
+                    "cover info"
+                    "cover progress"
+                    "cover controls";
+                gap: var(--space-md) var(--space-xl);
+                align-items: center;
+            }
+
+            .audio-cover-wrapper {
+                grid-area: cover;
+                margin: 0;
+            }
+
+            .audio-info {
+                grid-area: info;
+                text-align: left;
+                margin-bottom: 0;
+            }
+
+            .audio-progress-container {
+                grid-area: progress;
+                margin-bottom: 0;
+            }
+
+            .audio-controls {
+                grid-area: controls;
+                justify-content: flex-start;
+                gap: var(--space-lg);
+            }
+        }
+
         @media (prefers-color-scheme: dark) {
             .audio-ctrl-btn.speed-btn.active {
                 color: var(--accent-color);
@@ -496,6 +548,9 @@
 
         .detail-content {
             margin-top: var(--space-2xl);
+            max-width: 920px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .detail-title {
@@ -512,6 +567,12 @@
             color: var(--label-tertiary);
             margin-bottom: var(--space-lg);
             letter-spacing: 0.01em;
+        }
+
+        @media (min-width: 768px) {
+            .detail-title {
+                font-size: 28px;
+            }
         }
 
         /* 信息卡片组 - Apple Grouped Style */
