@@ -1,0 +1,17 @@
+# Git 内部数据（含大体积 pack 文件，会触发 Workers 25MiB 限制）
+.git/
+
+# 本地工具与构建产物
+.coze/
+.agents/
+.codex/
+.github/
+.wrangler/
+
+# 部署/工具配置，无需作为站点资源
+.gitignore
+.assetsignore
+wrangler.jsonc
+
+# 抓取原始数据，页面不直接使用
+bilibili_videos.json
