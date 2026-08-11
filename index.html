@@ -112,10 +112,83 @@
             opacity: 0.5;
         }
 
+        /* === 页头 - Apple Header Style === */
+        .site-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-2xl) max(20px, env(safe-area-inset-left)) var(--space-lg) max(20px, env(safe-area-inset-right));
+            text-align: center;
+        }
+
+        .site-eyebrow {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--label-tertiary);
+            margin-bottom: 8px;
+        }
+
+        .site-title {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--label-primary);
+            line-height: 1.15;
+        }
+
+        .site-subtitle {
+            font-size: 14px;
+            color: var(--label-secondary);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .search-wrap {
+            max-width: 460px;
+            margin: var(--space-lg) auto 0;
+        }
+
+        .search-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 16px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            background: var(--bg-tertiary);
+            color: var(--label-primary);
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color var(--duration-fast) var(--ease-out),
+                        box-shadow var(--duration-fast) var(--ease-out),
+                        background var(--duration-fast) var(--ease-out);
+        }
+
+        .search-input::placeholder {
+            color: var(--label-tertiary);
+        }
+
+        .search-input:focus {
+            background: var(--bg-secondary);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 45, 85, 0.12);
+        }
+
+        @media (min-width: 768px) {
+            .site-title {
+                font-size: 44px;
+            }
+
+            .site-subtitle {
+                font-size: 16px;
+            }
+        }
+
         /* === 分类 Tab - Apple Segmented Control Style === */
         .category-tabs {
             display: flex;
-            padding: var(--space-lg) 20px var(--space-md);
+            padding: var(--space-lg) max(20px, env(safe-area-inset-left)) var(--space-md) max(20px, env(safe-area-inset-right));
             gap: var(--space-sm);
             overflow-x: auto;
             scrollbar-width: none;
@@ -168,6 +241,14 @@
             transform: scale(0.97);
         }
 
+        .work-card:focus-visible,
+        .tab-btn:focus-visible,
+        .detail-back-btn:focus-visible,
+        .detail-nav-btn:focus-visible {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+
         @media (min-width: 768px) {
             .category-tabs {
                 justify-content: center;
@@ -181,28 +262,27 @@
 
         /* === 列表页容器 === */
         .view-container {
-            padding: var(--space-lg) 20px;
+            padding: var(--space-lg) max(20px, env(safe-area-inset-left)) var(--space-lg) max(20px, env(safe-area-inset-right));
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        @media (min-width: 1440px) {
+            .view-container {
+                max-width: 1400px;
+            }
         }
 
         /* === 作品网格 - Apple Grid === */
         .works-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: var(--space-xl);
         }
 
         @media (min-width: 640px) {
             .works-grid {
-                grid-template-columns: repeat(2, 1fr);
                 gap: var(--space-2xl) var(--space-xl);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .works-grid {
-                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -249,6 +329,39 @@
             transform: scale(1.03);
         }
 
+        .card-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--duration-fast) var(--ease-out);
+            pointer-events: none;
+        }
+
+        .card-play svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+            margin-left: 2px;
+        }
+
+        @media (hover: hover) {
+            .work-card:hover .card-play,
+            .work-card:focus-visible .card-play {
+                opacity: 1;
+            }
+        }
+
         .card-tag {
             position: absolute;
             top: 10px;
@@ -279,6 +392,12 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        @media (min-width: 1024px) {
+            .card-title {
+                font-size: 17px;
+            }
         }
 
         .card-desc {
@@ -588,6 +707,39 @@
             }
         }
 
+        /* 上一个 / 下一个作品 */
+        .detail-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-md);
+            margin-top: var(--space-2xl);
+        }
+
+        .detail-nav-btn {
+            appearance: none;
+            -webkit-appearance: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--separator-color);
+            color: var(--label-primary);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background var(--duration-fast) var(--ease-out),
+                        opacity var(--duration-fast) var(--ease-out);
+        }
+
+        .detail-nav-btn:hover:not(:disabled) {
+            background: var(--bg-tertiary);
+        }
+
+        .detail-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
         /* 信息卡片组 - Apple Grouped Style */
         .info-section {
             background: var(--bg-secondary);
@@ -696,6 +848,16 @@
 
     <!-- 列表视图 -->
     <div id="list-view">
+        <!-- 页头 -->
+        <header class="site-header">
+            <p class="site-eyebrow">SHUMEI ART</p>
+            <h1 class="site-title">树莓社 · 作品集</h1>
+            <p class="site-subtitle">用流动的影像传承历史，以不变的温度记录人文</p>
+            <div class="search-wrap">
+                <input class="search-input" id="searchInput" type="search" placeholder="搜索作品标题或简介" autocomplete="off" enterkeyhint="search">
+            </div>
+        </header>
+
         <!-- 分类 Tab 栏 -->
         <div class="category-tabs">
             <button class="tab-btn active" data-category="all" onclick="filterCategory('all', this)">全部作品<span class="tab-count"></span></button>
@@ -738,6 +900,12 @@
                 <div class="info-section">
                     <div class="section-label">演职人员 (Credits)</div>
                     <div class="credits-grid" id="detailCredits"></div>
+                </div>
+
+                <!-- 上一个 / 下一个作品 -->
+                <div class="detail-nav">
+                    <button class="detail-nav-btn" id="prevWorkBtn">← 上一个</button>
+                    <button class="detail-nav-btn" id="nextWorkBtn">下一个 →</button>
                 </div>
             </div>
         </div>
@@ -806,6 +974,7 @@
         // 逻辑控制代码
         // ==========================================
         let currentCategory = 'all';
+        let currentSearch = '';
         let listScrollY = 0;
 
         // 初始化页面
@@ -816,6 +985,13 @@
                 console.error('加载 works.csv 失败，请确认文件存在并通过 http 访问', err);
             }
             updateTabCounts();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    currentSearch = searchInput.value;
+                    renderWorksList(worksData);
+                });
+            }
             renderWorksList(worksData);
         });
 
@@ -829,6 +1005,7 @@
                 const category = btn.getAttribute('data-category') || 'all';
                 const countEl = btn.querySelector('.tab-count');
                 if (countEl) countEl.textContent = counts[category] || 0;
+                btn.setAttribute('aria-pressed', String(btn.classList.contains('active')));
             });
         }
 
@@ -838,24 +1015,37 @@
             grid.innerHTML = '';
 
             const sortedData = [...data].sort((a, b) => workDateValue(b) - workDateValue(a));
-            const filteredData = currentCategory === 'all' 
-                ? sortedData
-                : sortedData.filter(item => item.category === currentCategory);
+            const query = (currentSearch || '').trim().toLowerCase();
+            const filteredData = sortedData.filter(item => {
+                if (currentCategory !== 'all' && item.category !== currentCategory) return false;
+                if (!query) return true;
+                return (item.title + ' ' + item.desc).toLowerCase().includes(query);
+            });
 
             if (filteredData.length === 0) {
-                grid.innerHTML = '<div class="empty-state">该分类下暂无作品</div>';
+                grid.innerHTML = `<div class="empty-state">${query ? '没有找到相关作品' : '该分类下暂无作品'}</div>`;
                 return;
             }
 
             filteredData.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'work-card';
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', '查看作品：' + item.title);
                 card.onclick = () => openDetailView(item.id);
+                card.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openDetailView(item.id);
+                    }
+                };
 
                 card.innerHTML = `
                     <div class="card-cover-wrapper">
                         <img class="card-cover" src="${item.cover}" alt="${item.title}" loading="lazy">
                         <span class="card-tag">${item.categoryName}</span>
+                        <span class="card-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
                     </div>
                     <div class="card-info">
                         <div class="card-title">${item.title}</div>
@@ -880,6 +1070,7 @@
             // 更新 Tab 选中状态
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.setAttribute('aria-pressed', String(btn.classList.contains('active'))));
 
             renderWorksList(worksData);
         }
@@ -1050,6 +1241,18 @@
                     <span class="credit-name">${c.name}</span>
                 </div>
             `).join('');
+
+            // 上一个 / 下一个作品
+            const sortedWorks = [...worksData].sort((a, b) => workDateValue(b) - workDateValue(a));
+            const currentIndex = sortedWorks.findIndex(item => item.id === work.id);
+            const prevWork = sortedWorks[currentIndex - 1];
+            const nextWork = sortedWorks[currentIndex + 1];
+            const prevBtn = document.getElementById('prevWorkBtn');
+            const nextBtn = document.getElementById('nextWorkBtn');
+            prevBtn.disabled = !prevWork;
+            nextBtn.disabled = !nextWork;
+            prevBtn.onclick = () => prevWork && openDetailView(prevWork.id);
+            nextBtn.onclick = () => nextWork && openDetailView(nextWork.id);
 
             // 切换视图
             document.getElementById('list-view').style.display = 'none';
