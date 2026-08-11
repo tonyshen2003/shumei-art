@@ -150,6 +150,19 @@
             box-shadow: var(--shadow-sm);
         }
 
+        .tab-count {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--label-tertiary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .tab-btn.active .tab-count {
+            color: var(--label-secondary);
+        }
+
         .tab-btn:active {
             opacity: 0.7;
             transform: scale(0.97);
@@ -685,10 +698,12 @@
     <div id="list-view">
         <!-- 分类 Tab 栏 -->
         <div class="category-tabs">
-            <button class="tab-btn active" onclick="filterCategory('all', this)">全部作品</button>
-            <button class="tab-btn" onclick="filterCategory('original', this)">原创作品</button>
-            <button class="tab-btn" onclick="filterCategory('digital', this)">数字媒体</button>
-            <button class="tab-btn" onclick="filterCategory('campus', this)">校园传媒</button>
+            <button class="tab-btn active" data-category="all" onclick="filterCategory('all', this)">全部作品<span class="tab-count"></span></button>
+            <button class="tab-btn" data-category="original" onclick="filterCategory('original', this)">原创作品<span class="tab-count"></span></button>
+            <button class="tab-btn" data-category="events" onclick="filterCategory('events', this)">校园活动<span class="tab-count"></span></button>
+            <button class="tab-btn" data-category="music" onclick="filterCategory('music', this)">音乐舞蹈<span class="tab-count"></span></button>
+            <button class="tab-btn" data-category="news" onclick="filterCategory('news', this)">校园新闻<span class="tab-count"></span></button>
+            <button class="tab-btn" data-category="digital" onclick="filterCategory('digital', this)">数字创意<span class="tab-count"></span></button>
         </div>
 
         <div class="view-container">
@@ -800,8 +815,22 @@
             } catch (err) {
                 console.error('加载 works.csv 失败，请确认文件存在并通过 http 访问', err);
             }
+            updateTabCounts();
             renderWorksList(worksData);
         });
+
+        // 更新分类 Tab 的作品数量
+        function updateTabCounts() {
+            const counts = { all: worksData.length };
+            worksData.forEach(work => {
+                counts[work.category] = (counts[work.category] || 0) + 1;
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const category = btn.getAttribute('data-category') || 'all';
+                const countEl = btn.querySelector('.tab-count');
+                if (countEl) countEl.textContent = counts[category] || 0;
+            });
+        }
 
         // 渲染列表
         function renderWorksList(data) {
