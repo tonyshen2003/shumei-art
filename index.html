@@ -746,9 +746,10 @@
             const grid = document.getElementById('worksGrid');
             grid.innerHTML = '';
 
+            const sortedData = [...data].sort((a, b) => workDateValue(b) - workDateValue(a));
             const filteredData = currentCategory === 'all' 
-                ? data 
-                : data.filter(item => item.category === currentCategory);
+                ? sortedData
+                : sortedData.filter(item => item.category === currentCategory);
 
             if (filteredData.length === 0) {
                 grid.innerHTML = '<div class="empty-state">该分类下暂无作品</div>';
@@ -773,6 +774,12 @@
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        // 从中文日期（如 2026年6月23日）解析时间戳，用于倒序排列
+        function workDateValue(work) {
+            const match = (work.episodeDate || '').match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+            return match ? new Date(+match[1], +match[2] - 1, +match[3]).getTime() : 0;
         }
 
         // 分类筛选
