@@ -1082,24 +1082,8 @@
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
                     currentSearch = searchInput.value;
-            renderWorksList(worksData);
-        });
-
-        // 加载数据前先展示骨架屏，避免页面“空白/像没有作品”
-        function renderSkeleton(count = 8) {
-            const grid = document.getElementById('worksGrid');
-            grid.innerHTML = Array.from({ length: count }, () => `
-                <div class="work-card skeleton-card">
-                    <div class="card-cover-wrapper">
-                        <div class="skeleton-cover"></div>
-                    </div>
-                    <div class="card-info">
-                        <div class="skeleton-line" style="width:82%"></div>
-                        <div class="skeleton-line" style="width:58%"></div>
-                    </div>
-                </div>
-            `).join('');
-        }
+                    renderWorksList(worksData);
+                });
             }
 
             const shareBtn = document.getElementById('shareBtn');
@@ -1130,6 +1114,22 @@
             renderWorksList(worksData);
             handleHashChange();
         });
+
+        // 加载数据前先展示骨架屏，避免页面“空白/像没有作品”
+        function renderSkeleton(count = 8) {
+            const grid = document.getElementById('worksGrid');
+            grid.innerHTML = Array.from({ length: count }, () => `
+                <div class="work-card skeleton-card">
+                    <div class="card-cover-wrapper">
+                        <div class="skeleton-cover"></div>
+                    </div>
+                    <div class="card-info">
+                        <div class="skeleton-line" style="width:82%"></div>
+                        <div class="skeleton-line" style="width:58%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
         // 从 URL Hash 中解析作品 ID（形如 #/work/123）
         function getWorkIdFromHash() {
