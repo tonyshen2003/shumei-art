@@ -95,6 +95,15 @@
             letter-spacing: -0.01em;
         }
 
+        /* App 使用原生筛选器时，隐藏网页自带的筛选 UI */
+        body.native-filter-tabs .category-tabs {
+            display: none;
+        }
+
+        body.native-filter-search .search-wrap {
+            display: none;
+        }
+
         /* === 顶部导航栏 - Apple Style === */
         .detail-back-btn {
             background: none;
@@ -1385,6 +1394,46 @@
             requestAnimationFrame(() => {
                 window.scrollTo(0, listScrollY);
             });
+        }
+
+        // ==========================================
+        // App 原生筛选器桥接接口
+        // App 通过 evaluateJavaScript 调用：
+        //   window.ShumeiBridge.setCategory('music')
+        //   window.ShumeiBridge.setSearch('毕业典礼')
+        //   window.ShumeiBridge.hideTabs(true)
+        //   window.ShumeiBridge.hideSearch(true)
+        // ==========================================
+        window.ShumeiBridge = {
+            setCategory(category) {
+                const btn = document.querySelector(`.tab-btn[data-category="${category}"]`);
+                if (!btn) return false;
+                filterCategory(category, btn);
+                return true;
+            },
+            setSearch(text) {
+                currentSearch = String(text || '');
+                const input = document.getElementById('searchInput');
+                if (input && input.value !== currentSearch) {
+                    input.value = currentSearch;
+                }
+                renderWorksList(worksData);
+                return true;
+            },
+            hideTabs(hidden) {
+                document.body.classList.toggle('native-filter-tabs', !!hidden);
+            },
+            hideSearch(hidden) {
+                document.body.classList.toggle('native-filter-search', !!hidden);
+            },
+            getState() {
+                return { category: currentCategory, search: currentSearch };
+            }
+        };
+
+        // 通知 App 网页桥接已就绪（可选，App 端注册名为 shumeiFilter 的 handler 即可收到）
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.shumeiFilter) {
+            window.webkit.messageHandlers.shumeiFilter.postMessage({ type: 'ready' });
         }
     </script>
 </body>
