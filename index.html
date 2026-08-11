@@ -791,6 +791,7 @@
         // 逻辑控制代码
         // ==========================================
         let currentCategory = 'all';
+        let listScrollY = 0;
 
         // 初始化页面
         window.addEventListener('DOMContentLoaded', async () => {
@@ -987,6 +988,9 @@
             const work = worksData.find(item => item.id === workId);
             if (!work) return;
 
+            // 记住进入详情前的列表滚动位置
+            listScrollY = window.scrollY;
+
             // 填写详情信息
             document.getElementById('detailTitle').innerText = work.title;
             document.getElementById('detailDesc').innerText = work.desc;
@@ -1047,7 +1051,10 @@
             void document.getElementById('list-view').offsetWidth;
             document.getElementById('list-view').classList.add('fade-enter');
 
-            window.scrollTo(0, 0);
+            // 恢复进入详情前的滚动位置
+            requestAnimationFrame(() => {
+                window.scrollTo(0, listScrollY);
+            });
         }
     </script>
 </body>
