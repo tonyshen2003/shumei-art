@@ -18,6 +18,7 @@
 - 分享链接：每个作品有独立 URL（`#/work/作品ID`），详情页可一键复制链接
 - App 嵌入适配：暴露 `window.ShumeiBridge`（setCategory / setSearch / hideTabs / hideSearch），供 iOS/Android 原生筛选器调用
 - 数据源：`works.csv`（页面通过 fetch 动态加载，新增作品只需在表格里加一行）
+- 修改 `works.csv` 后运行 `python3 sync_works_fallback.py`，同步页面内置备份数据
 
 ## 开发命令
 - 本地预览：`python -m http.server ${DEPLOY_RUN_PORT} --bind 0.0.0.0`
