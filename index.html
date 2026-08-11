@@ -112,6 +112,40 @@
             opacity: 0.5;
         }
 
+        .detail-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-sm);
+        }
+
+        .share-btn {
+            background: var(--bg-tertiary);
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--label-primary);
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 9px;
+            font-family: inherit;
+            transition: opacity var(--duration-fast) var(--ease-out),
+                        background var(--duration-fast) var(--ease-out),
+                        color var(--duration-fast) var(--ease-out);
+        }
+
+        .share-btn:hover {
+            background: var(--bg-secondary);
+        }
+
+        .share-btn:active {
+            opacity: 0.7;
+        }
+
+        .share-btn.copied {
+            color: var(--accent-color);
+        }
+
         /* === 页头 - Apple Header Style === */
         .site-header {
             max-width: 1200px;
@@ -244,7 +278,8 @@
         .work-card:focus-visible,
         .tab-btn:focus-visible,
         .detail-back-btn:focus-visible,
-        .detail-nav-btn:focus-visible {
+        .detail-nav-btn:focus-visible,
+        .share-btn:focus-visible {
             outline: 2px solid var(--accent-color);
             outline-offset: 2px;
         }
@@ -876,7 +911,10 @@
     <!-- 详情/播放器视图 -->
     <div id="detail-view">
         <div class="view-container">
-            <button class="detail-back-btn" onclick="showListView()">← 返回</button>
+            <div class="detail-top-bar">
+                <button class="detail-back-btn" onclick="showListView()">← 返回</button>
+                <button class="share-btn" id="shareBtn" title="复制当前作品链接">分享链接</button>
+            </div>
             <!-- 16:9 响应式视频播放器 -->
             <div class="video-player-container" id="playerWrapper"></div>
 
@@ -976,6 +1014,7 @@
         let currentCategory = 'all';
         let currentSearch = '';
         let listScrollY = 0;
+        let currentWorkId = null;
 
         // 初始化页面
         window.addEventListener('DOMContentLoaded', async () => {
@@ -992,8 +1031,51 @@
                     renderWorksList(worksData);
                 });
             }
+
+            const shareBtn = document.getElementById('shareBtn');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', async () => {
+                    const url = location.href;
+                    try {
+                        await navigator.clipboard.writeText(url);
+                    } catch (err) {
+                        const textarea = document.createElement('textarea');
+                        textarea.value = url;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        textarea.remove();
+                    }
+                    shareBtn.textContent = '已复制';
+                    shareBtn.classList.add('copied');
+                    setTimeout(() => {
+                        shareBtn.textContent = '分享链接';
+                        shareBtn.classList.remove('copied');
+                    }, 1600);
+                });
+            }
+
+            window.addEventListener('hashchange', handleHashChange);
+            window.addEventListener('popstate', handleHashChange);
             renderWorksList(worksData);
+            handleHashChange();
         });
+
+        // 从 URL Hash 中解析作品 ID（形如 #/work/123）
+        function getWorkIdFromHash() {
+            const match = (location.hash || '').match(/^#\/work\/(\d+)$/);
+            return match ? match[1] : null;
+        }
+
+        // 响应浏览器前进 / 后退 / 直接打开分享链接
+        function handleHashChange() {
+            const workId = getWorkIdFromHash();
+            if (workId) {
+                if (workId !== currentWorkId) openDetailView(workId);
+            } else if (currentWorkId) {
+                showListView();
+            }
+        }
 
         // 更新分类 Tab 的作品数量
         function updateTabCounts() {
@@ -1208,8 +1290,15 @@
             const work = worksData.find(item => item.id === workId);
             if (!work) return;
 
+            currentWorkId = work.id;
+
             // 记住进入详情前的列表滚动位置
             listScrollY = window.scrollY;
+
+            // 更新地址栏，方便分享
+            if (getWorkIdFromHash() !== work.id) {
+                location.hash = '#/work/' + work.id;
+            }
 
             // 填写详情信息
             document.getElementById('detailTitle').innerText = work.title;
@@ -1267,6 +1356,15 @@
 
         // 返回列表页
         function showListView() {
+            currentWorkId = null;
+
+            // 清掉地址栏的作品 Hash，但不新增历史记录
+            try {
+                history.replaceState(null, '', location.pathname + location.search);
+            } catch (err) {
+                location.hash = '';
+            }
+
             // 停止音频播放
             if (currentAudio) {
                 currentAudio.pause();
