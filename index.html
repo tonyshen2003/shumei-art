@@ -1428,6 +1428,16 @@
             },
             getState() {
                 return { category: currentCategory, search: currentSearch };
+            },
+            isDetailOpen() {
+                return currentWorkId !== null;
+            },
+            goBack() {
+                if (currentWorkId) {
+                    showListView();
+                } else if (history.length > 1) {
+                    history.back();
+                }
             }
         };
 
