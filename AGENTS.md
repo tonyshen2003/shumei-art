@@ -21,5 +21,5 @@
 - 修改 `works.csv` 后运行 `python3 sync_works_fallback.py`，同步页面内置备份数据
 
 ## 开发命令
-- 本地预览：`python -m http.server ${DEPLOY_RUN_PORT} --bind 0.0.0.0`
+- 本地预览：`python -m http.server ${DEPLOY_RUN_PORT} --bind 0.0.0.0`（需 Python 3.11+，旧版本不支持 HTTP Range 请求，会导致广播音频进度条无法跳转；或改用 `npx serve`）
 - 无构建/无 lint/无测试

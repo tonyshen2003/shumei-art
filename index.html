@@ -615,14 +615,21 @@
             overflow: hidden;
             cursor: pointer;
             position: relative;
+            touch-action: none;
             transition: height 0.15s ease;
         }
 
-        .audio-progress-bar:hover {
+        .audio-progress-bar:hover,
+        .audio-progress-bar.dragging {
             height: 8px;
         }
 
-        .audio-progress-bar:hover .audio-progress-fill {
+        .audio-progress-bar.dragging {
+            cursor: grabbing;
+        }
+
+        .audio-progress-bar:hover .audio-progress-fill,
+        .audio-progress-bar.dragging .audio-progress-fill {
             background: var(--accent-color-secondary);
         }
 
@@ -632,6 +639,10 @@
             background: var(--accent-color);
             border-radius: 3px;
             transition: width 0.1s linear;
+        }
+
+        .audio-progress-bar.dragging .audio-progress-fill {
+            transition: none;
         }
 
         .audio-controls {
@@ -1254,7 +1265,8 @@
                 </div>
                 <div class="audio-progress-container">
                     <span class="audio-time current" id="audioCurrentTime">0:00</span>
-                    <div class="audio-progress-bar" id="audioProgressBar">
+                    <div class="audio-progress-bar" id="audioProgressBar" role="slider" tabindex="0"
+                         aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                         <div class="audio-progress-fill" id="audioProgressFill"></div>
                     </div>
                     <span class="audio-time duration" id="audioDuration">0:00</span>
@@ -1294,12 +1306,25 @@
 
             audio.addEventListener('loadedmetadata', () => {
                 durationEl.innerText = formatTime(audio.duration);
+                if (isFinite(audio.duration)) {
+                    progressBar.setAttribute('aria-valuemax', Math.round(audio.duration));
+                }
             });
 
-            audio.addEventListener('timeupdate', () => {
-                const percent = (audio.currentTime / audio.duration) * 100;
+            // 把进度条/时间文本同步到音频实际位置
+            const syncProgressUI = () => {
+                const percent = isFinite(audio.duration) ? (audio.currentTime / audio.duration) * 100 : 0;
                 progressFill.style.width = percent + '%';
                 currentTimeEl.innerText = formatTime(audio.currentTime);
+                if (isFinite(percent)) {
+                    progressBar.setAttribute('aria-valuenow', Math.round(audio.currentTime));
+                }
+            };
+
+            audio.addEventListener('timeupdate', () => {
+                // 拖动过程中只显示手指/鼠标指向的位置，松手后再恢复同步
+                if (isDragging) return;
+                syncProgressUI();
             });
 
             audio.addEventListener('play', () => {
@@ -1322,10 +1347,88 @@
                 }
             });
 
-            progressBar.addEventListener('click', (e) => {
+            // === 进度条：点击 / 拖动跳转（Pointer Events，同时兼容鼠标和触摸）===
+            let isDragging = false;
+
+            const ratioFromClientX = (clientX) => {
                 const rect = progressBar.getBoundingClientRect();
-                const ratio = (e.clientX - rect.left) / rect.width;
-                audio.currentTime = ratio * audio.duration;
+                return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+            };
+
+            // 服务器不支持 HTTP Range 请求时，浏览器无法跳到未加载的位置
+            // （audio.seekable 范围为空），此时强行设置 currentTime 会导致音频重载回到开头
+            const canSeekTo = (time) => {
+                if (!isFinite(audio.duration)) return false;
+                if (audio.seekable.length > 0) {
+                    for (let i = 0; i < audio.seekable.length; i++) {
+                        if (time >= audio.seekable.start(i) - 0.5 &&
+                            time <= audio.seekable.end(i) + 0.5) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            };
+
+            // 拖动中只更新界面，不真正跳转
+            const previewSeek = (ratio) => {
+                progressFill.style.width = (ratio * 100) + '%';
+                currentTimeEl.innerText = formatTime(ratio * audio.duration);
+            };
+
+            // 松手时才真正 seek
+            const commitSeek = (ratio) => {
+                const time = ratio * audio.duration;
+                if (canSeekTo(time)) {
+                    audio.currentTime = time;
+                } else {
+                    // 不可跳转时立即把进度条恢复到实际位置（暂停时没有 timeupdate，必须主动同步）
+                    syncProgressUI();
+                }
+            };
+
+            progressBar.addEventListener('pointerdown', (e) => {
+                if (!isFinite(audio.duration)) return;
+                isDragging = true;
+                progressBar.classList.add('dragging');
+                try { progressBar.setPointerCapture(e.pointerId); } catch (err) {}
+                previewSeek(ratioFromClientX(e.clientX));
+                e.preventDefault();
+            });
+
+            progressBar.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                previewSeek(ratioFromClientX(e.clientX));
+            });
+
+            const endDrag = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                progressBar.classList.remove('dragging');
+                try { progressBar.releasePointerCapture(e.pointerId); } catch (err) {}
+                commitSeek(ratioFromClientX(e.clientX));
+            };
+            progressBar.addEventListener('pointerup', endDrag);
+            progressBar.addEventListener('pointercancel', () => {
+                isDragging = false;
+                progressBar.classList.remove('dragging');
+                // 取消拖拽，进度条回到音频实际位置
+                syncProgressUI();
+            });
+
+            // 键盘操作：左右方向键 ±10 秒，Home/End 跳到开头/结尾
+            progressBar.addEventListener('keydown', (e) => {
+                if (!isFinite(audio.duration)) return;
+                let time = null;
+                if (e.key === 'ArrowRight') time = audio.currentTime + 10;
+                else if (e.key === 'ArrowLeft') time = audio.currentTime - 10;
+                else if (e.key === 'Home') time = 0;
+                else if (e.key === 'End') time = audio.duration;
+                if (time === null) return;
+                e.preventDefault();
+                time = Math.min(audio.duration, Math.max(0, time));
+                if (canSeekTo(time)) audio.currentTime = time;
             });
 
             const speeds = [1, 1.25, 1.5, 2];
@@ -1339,11 +1442,21 @@
             });
 
             rewindBtn.addEventListener('click', () => {
-                audio.currentTime = Math.max(0, audio.currentTime - 15);
+                const time = Math.max(0, audio.currentTime - 15);
+                // 服务器不支持 Range 请求时 seek 会失败并导致音频重载回开头，此时直接忽略
+                if (canSeekTo(time)) {
+                    audio.currentTime = time;
+                }
             });
         }
 
         function renderVideoPlayer(work) {
+            // 切到视频作品前停止正在播放的广播音频，
+            // 否则旧 audio 元素随 innerHTML 脱离 DOM 后仍会在后台播放
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
             const playerWrapper = document.getElementById('playerWrapper');
             playerWrapper.className = 'video-player-container';
             playerWrapper.innerHTML = `
