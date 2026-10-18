@@ -105,3 +105,7 @@ logs/
 
 # Claude 本地工具配置（含权限记录与本机路径，不入库）
 .claude/
+
+# 本地浏览器自动化与 AI 工作目录
+.playwright-cli/
+.workbuddy/
